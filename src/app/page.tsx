@@ -1,7 +1,7 @@
 'use client';
-import { on } from "events";
+//import { on } from "events";
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 /*import { db } from "./firebase/firebaseConfig";
 import { collection, onSnapshot } from "firebase/firestore";
 import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";*/
@@ -52,18 +52,18 @@ export default function Home() {
     audio.play();
   };
 
-  const [showPopup, setShowPopup] = useState(false);
+  /*const [showPopup, setShowPopup] = useState(false);
 
   // Watch for data changes to play sound when left or right > 1
-  /*useEffect(() => {
+  useEffect(() => {
     if (data[0]?.Left > 1 || data[0]?.Right > 1) {
       playNotificationSound();
     }
-  }, [data]);*/
+  }, [data]);
 
   useEffect(() => {
     setShowPopup(true);
-  }, []);
+  }, []);*/
 
   const [leftDistance, setLeftDistance] = useState(0);
   const [rightDistance, setRightDistance] = useState(0);
