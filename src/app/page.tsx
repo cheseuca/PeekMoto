@@ -1,101 +1,155 @@
-import Image from "next/image";
+'use client';
+import { on } from "events";
+import Link from "next/link";
+import { useState, useEffect, use } from "react";
+/*import { db } from "./firebase/firebaseConfig";
+import { collection, onSnapshot } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL, listAll } from "firebase/storage";*/
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  /*const [data, setData] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "DistancesData"), async (querySnapshot) => {
+      const doc = querySnapshot.docs[0]?.data();
+      console.log("Fetched data:", doc); // Log the fetched data
+      if (doc) {
+        setData([{ Left: doc.Left, Right: doc.Right }]);
+      }
+    }, (error) => {
+      console.error("Error fetching data: ", error);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+  
+  const [latestPhotoUrl, setLatestPhotoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLatestPhoto = async () => {
+      try {
+        const storage = getStorage();
+        const listRef = ref(storage, '/detected_vehicles');
+        const res = await listAll(listRef);
+        if (res.items.length > 0) {
+          const latestItem = res.items[res.items.length - 1];
+          const url = await getDownloadURL(latestItem);
+          setLatestPhotoUrl(url);
+        }
+      } catch (error) {
+        console.error("Error fetching latest photo: ", error);
+      }
+    };
+
+    fetchLatestPhoto();
+  }, []);*/
+
+  const playNotificationSound = () => {
+    const audio = new Audio("/alert.mp3");
+    audio.play();
+  };
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Watch for data changes to play sound when left or right > 1
+  /*useEffect(() => {
+    if (data[0]?.Left > 1 || data[0]?.Right > 1) {
+      playNotificationSound();
+    }
+  }, [data]);*/
+
+  useEffect(() => {
+    setShowPopup(true);
+  }, []);
+
+  const [leftDistance, setLeftDistance] = useState(0);
+  const [rightDistance, setRightDistance] = useState(0);
+
+  useEffect(() => {
+    if (leftDistance > 1 || rightDistance > 1) {
+      playNotificationSound();
+    } 
+  }, [leftDistance, rightDistance]);
+
+  return (
+    <div>
+      {/* {showPopup && (
+      <div className="fixed inset-0 flex items-center justify-center bg-white/50">
+        <div className="bg-black p-6 rounded-2xl shadow-lg max-w-sm w-full">
+        <h2 className="text-xl font-bold mb-2">PSA❗</h2>
+        <p className="mb-4">This site only showcases the capabilities of the PeekMoto app, where it enables an alarm when detecting vehicles out the the driver's view (blindspot). There are limitations, mainly no working hardware prototype available; this only serves as a proof of concept.</p>
+        <button
+          onClick={() => {
+          setShowPopup(false);
+          }}
+          className="px-4 py-2 bg-gray-600 text-white rounded-lg"
+        >
+          Try it out!
+        </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+      )} */}
+      <nav className="bg-black border-b border-white">
+      <div className="flex flex-wrap items-center justify-between">
+      <h1 className="text-4xl font-bold m-5">PeekMoto</h1>
+      </div>
+      </nav>
+      <div className="flex justify-center gap-5 m-5">
+      <div className="flex flex-col justify-center">
+        <button
+        onClick={() => setLeftDistance(2)}
+        className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <abbr className="no-underline" title="Push this button to set the distance on the left side to more than 1 and produce an alert sound">Click Me!</abbr>
+        </button>
+        <button
+        onClick={() => setLeftDistance(0)}
+        className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <abbr className="no-underline" title="Push this button to reset">Stop</abbr>
+        </button>
+      </div>
+
+      {/* Left Square */}
+      <div
+        className={`w-64 h-32 flex flex-col items-center justify-center border rounded-lg ${
+        leftDistance < 1 ? "bg-green-500" : "bg-red-500"
+        }`}
+      >
+        <p className="text-white font-bold">{`Left: ${leftDistance}`}</p>
+      </div>
+
+      {/* Right Square */}
+      <div
+        className={`w-64 h-32 flex flex-col items-center justify-center border rounded-lg ${
+        rightDistance < 1 ? "bg-green-500" : "bg-red-500"
+        }`}
+      >
+        <p className="text-white font-bold">{`Right: ${rightDistance}`}</p>
+      </div>
+      <div className="flex flex-col justify-center">
+        <button 
+        onClick={() => setRightDistance(2)}
+        className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"><abbr className="no-underline" title="Push this button to set the distance on the right side to more than 1 and produce an alert sound">Click Me!</abbr></button>
+        <button
+        onClick={() => setRightDistance(0)}
+        className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <abbr className="no-underline" title="Push this button to reset">Stop</abbr>
+        </button>
+      </div>
+      </div>
+      <div className="flex justify-center bg-gray-800 rounded-lg my-5 mx-20 p-20">
+        <h3 className="text-white">Live video from the ESP 32 Cam</h3>
+      </div>
+      <div className="flex justify-center">
+      <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+        <Link href="/gallery">Check Past Snapshots</Link>
+      </button>
+      </div>
     </div>
   );
 }
